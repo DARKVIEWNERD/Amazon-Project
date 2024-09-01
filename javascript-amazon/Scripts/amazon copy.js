@@ -1,4 +1,4 @@
-import {cart}from '../data/cart.js'
+import {cart}from '../data/cart copy.js'
 let productHTML='';
 products.forEach((product)=>{
   productHTML +=` 
@@ -25,7 +25,7 @@ products.forEach((product)=>{
           </div>
 
           <div class="product-quantity-container">
-            <select>
+            <select class="js-quantity-selector-${product.id}">
               <option selected value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
@@ -41,7 +41,7 @@ products.forEach((product)=>{
 
           <div class="product-spacer"></div>
 
-          <div class="added-to-cart js-cart-popup">
+          <div class="added-to-cart js-add-to-cart-${product.id}">
             <img src="images/icons/checkmark.png">
             Added
           </div>
@@ -54,14 +54,15 @@ products.forEach((product)=>{
     `;
     
 });
+
 console.log(productHTML);
 document.querySelector('.js-product-grid').innerHTML=productHTML;
+const messageID={};
 document.querySelectorAll('.js-add-to-cart')
 .forEach((button)=>{
   button.addEventListener('click',()=>{
-   
-
-    const productId=button.dataset.productId;
+ 
+    const {productId}=button.dataset;
     let matchingItem;
     let cartquantity=0;
     cart.forEach((item)=>{
@@ -69,20 +70,35 @@ document.querySelectorAll('.js-add-to-cart')
         matchingItem=item;
       }
     });
+    const quantitySelector=document.querySelector(`.js-quantity-selector-${productId}`);
+    const quantity=Number(quantitySelector.value);
     if(matchingItem){
-      matchingItem.quantity +=1;
+      matchingItem.quantity +=quantity;
     }
     else{
       cart.push({
-        productId:productId,quantity: 1
+        productId,quantity
       }); 
     }
     cart.forEach((item)=>{
       
       cartquantity +=item.quantity;
     });
+  
     document.querySelector('.js-quantity').innerHTML=cartquantity;
     console.log(cart);
+    const visible= document.querySelector(`.js-add-to-cart-${productId}`);
+
+     visible.classList.add('added-visible');
+     const previousTimeoutId=messageID[productId];
+     if(previousTimeoutId){
+      clearTimeout(previousTimeoutId);
+     }
+     
+     const timeoutID=setTimeout(() => {
+      visible.classList.remove('added-visible');
+    }, 2000);
+    messageID[productId]=timeoutID;
   });
  
 });
