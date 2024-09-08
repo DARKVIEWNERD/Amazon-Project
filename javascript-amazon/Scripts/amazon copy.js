@@ -66,6 +66,7 @@ function updatecartQuantity(){
   });
   document.querySelector('.js-quantity').innerHTML=cartquantity;
 }
+
 function timeoutID(productId){
   const visible= document.querySelector(`.js-add-to-cart-${productId}`);
 
@@ -80,8 +81,11 @@ function timeoutID(productId){
     }, 2000);
       messageID[productId]=timeoutID;
 }
+
 document.querySelector('.js-product-grid').innerHTML=productHTML;
+
 const messageID={};
+
 document.querySelectorAll('.js-add-to-cart')
 .forEach((button)=>{
   button.addEventListener('click',()=>{
