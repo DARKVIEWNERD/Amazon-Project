@@ -99,6 +99,6 @@ document.querySelectorAll('.js-delete-link')
 .forEach((link)=>{
   link.addEventListener('click',()=>{
     link.dataset.productId;
-    console.log(link);  
+    removeFromCart(productId);
   });
 });
