@@ -1,4 +1,6 @@
-import {cart}from '../data/cart copy.js'
+import {cart,addToCart}from '../data/cart copy.js'
+import { products } from '../data/products copy.js';
+
 let productHTML='';
 products.forEach((product)=>{
   productHTML +=` 
@@ -55,50 +57,38 @@ products.forEach((product)=>{
     
 });
 
-console.log(productHTML);
+function updatecartQuantity(){
+  let cartquantity=0;
+  cart.forEach((item)=>{
+      
+    cartquantity +=item.quantity;
+  });
+  document.querySelector('.js-quantity').innerHTML=cartquantity;
+}
+function timeoutID(productId){
+  const visible= document.querySelector(`.js-add-to-cart-${productId}`);
+
+     visible.classList.add('added-visible');
+     const previousTimeoutId=messageID[productId];
+     if(previousTimeoutId){
+        clearTimeout(previousTimeoutId);
+     }
+     
+     const timeoutID=setTimeout(() => {
+       visible.classList.remove('added-visible');
+    }, 2000);
+      messageID[productId]=timeoutID;
+}
 document.querySelector('.js-product-grid').innerHTML=productHTML;
 const messageID={};
 document.querySelectorAll('.js-add-to-cart')
 .forEach((button)=>{
   button.addEventListener('click',()=>{
- 
     const {productId}=button.dataset;
-    let matchingItem;
-    let cartquantity=0;
-    cart.forEach((item)=>{
-      if(productId===item.productId){
-        matchingItem=item;
-      }
-    });
-    const quantitySelector=document.querySelector(`.js-quantity-selector-${productId}`);
-    const quantity=Number(quantitySelector.value);
-    if(matchingItem){
-      matchingItem.quantity +=quantity;
-    }
-    else{
-      cart.push({
-        productId,quantity
-      }); 
-    }
-    cart.forEach((item)=>{
-      
-      cartquantity +=item.quantity;
-    });
-  
-    document.querySelector('.js-quantity').innerHTML=cartquantity;
+    addToCart(productId); 
+    updatecartQuantity();
     console.log(cart);
-    const visible= document.querySelector(`.js-add-to-cart-${productId}`);
-
-     visible.classList.add('added-visible');
-     const previousTimeoutId=messageID[productId];
-     if(previousTimeoutId){
-      clearTimeout(previousTimeoutId);
-     }
-     
-     const timeoutID=setTimeout(() => {
-      visible.classList.remove('added-visible');
-    }, 2000);
-    messageID[productId]=timeoutID;
+    timeoutID(productId);
   });
  
 });
