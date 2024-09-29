@@ -66,7 +66,7 @@ function updatecartQuantity(){
   });
   document.querySelector('.js-quantity').innerHTML=cartquantity;
 }
-
+updatecartQuantity();
 function timeoutID(productId){
   const visible= document.querySelector(`.js-add-to-cart-${productId}`);
 

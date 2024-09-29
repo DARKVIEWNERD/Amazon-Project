@@ -1,6 +1,12 @@
 import { cart,removeFromCart } from "../data/cart.js";
 import { products } from "../data/products.js";
 import { formatCurrency } from "./utils/currency.js";
+import dayjs from 'https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.13/dayjs.min.js';
+
+
+const today=dayjs().format();
+  console(dayjs()); 
+
 
  let cartsummaryHTML='';
  cart.forEach((cartItem)=>{
