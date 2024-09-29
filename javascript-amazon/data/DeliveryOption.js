@@ -1,13 +1,13 @@
-const deliveryOption=
+export const deliveryOption=
 [{
   id:'1',
   deliveryDays: 7,
-  price:0
+  priceCents:0
 },{
   id:'2',
   deliveryDays: 3,
-  price: 499
+  priceCents: 499
 },{
   id:'3',
 deliveryDays:1,
-price: 999}];
+priceCents: 999}];
