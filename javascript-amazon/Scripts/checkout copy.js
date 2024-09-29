@@ -1,5 +1,5 @@
-import { cart,removeFromCart } from "../data/cart.js";
-import { products } from "../data/products.js";
+import { cart,removeFromCart } from "../data/cart copy.js";
+import { products } from "../data/products copy.js";
 import { formatCurrency } from "./utils/currency.js";
 
  let cartsummaryHTML='';

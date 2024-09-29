@@ -1,4 +1,7 @@
-import {cart}from '../data/cart.js'
+import {cart,addToCart}from '../data/cart.js'
+import { products } from '../data/products.js';
+import { formatCurrency } from './utils/currency.js';
+
 let productHTML='';
 products.forEach((product)=>{
   productHTML +=` 
@@ -21,11 +24,11 @@ products.forEach((product)=>{
           </div>
 
           <div class="product-price">
-            $${(product.priceCents/100).toFixed(2)}
+            $${formatCurrency(product.priceCents)}
           </div>
 
           <div class="product-quantity-container">
-            <select>
+            <select class="js-quantity-selector-${product.id}">
               <option selected value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
@@ -41,7 +44,7 @@ products.forEach((product)=>{
 
           <div class="product-spacer"></div>
 
-          <div class="added-to-cart js-cart-popup">
+          <div class="added-to-cart js-add-to-cart-${product.id}">
             <img src="images/icons/checkmark.png">
             Added
           </div>
@@ -54,35 +57,43 @@ products.forEach((product)=>{
     `;
     
 });
-console.log(productHTML);
+
+function updatecartQuantity(){
+  let cartquantity=0;
+  cart.forEach((item)=>{
+      
+    cartquantity +=item.quantity;
+  });
+  document.querySelector('.js-quantity').innerHTML=cartquantity;
+}
+
+function timeoutID(productId){
+  const visible= document.querySelector(`.js-add-to-cart-${productId}`);
+
+     visible.classList.add('added-visible');
+     const previousTimeoutId=messageID[productId];
+     if(previousTimeoutId){
+        clearTimeout(previousTimeoutId);
+     }
+     
+     const timeoutID=setTimeout(() => {
+       visible.classList.remove('added-visible');
+    }, 2000);
+      messageID[productId]=timeoutID;
+}
+
 document.querySelector('.js-product-grid').innerHTML=productHTML;
+
+const messageID={};
+
 document.querySelectorAll('.js-add-to-cart')
 .forEach((button)=>{
   button.addEventListener('click',()=>{
-   
-
-    const productId=button.dataset.productId;
-    let matchingItem;
-    let cartquantity=0;
-    cart.forEach((item)=>{
-      if(productId===item.productId){
-        matchingItem=item;
-      }
-    });
-    if(matchingItem){
-      matchingItem.quantity +=1;
-    }
-    else{
-      cart.push({
-        productId:productId,quantity: 1
-      }); 
-    }
-    cart.forEach((item)=>{
-      
-      cartquantity +=item.quantity;
-    });
-    document.querySelector('.js-quantity').innerHTML=cartquantity;
+    const {productId}=button.dataset;
+    addToCart(productId); 
+    updatecartQuantity();
     console.log(cart);
+    timeoutID(productId);
   });
  
 });
